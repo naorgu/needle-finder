@@ -19,9 +19,7 @@ class NeedleFinder {
     private fun findNeedleInner(fileInputStream: FileInputStream, key: String, start: Long, end: Long): String {
         if (start <= end) {
             val middle = (start + end) / 2
-            val bufferedFileInputStream = seekToNextNewLine(fileInputStream, middle)
-
-            val line = getStringUntilNewLine(bufferedFileInputStream)
+            val line = getNextLine(fileInputStream, middle)
 
             return when {
                 line == key -> {
@@ -36,7 +34,12 @@ class NeedleFinder {
             }
         }
 
-        val bufferedFileInputStream = seekToNextNewLine(fileInputStream, start)
+        return getNextLine(fileInputStream, start)
+    }
+
+    private fun getNextLine(fileInputStream: FileInputStream, startOffset: Long): String {
+        val bufferedFileInputStream = seekToNextNewLine(fileInputStream, startOffset)
+
         return getStringUntilNewLine(bufferedFileInputStream)
     }
 
